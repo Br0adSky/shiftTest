@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Add new product</title>
+</head>
+<body>
+<form method="post" th:action="@{extraFeatures}">
+    <form th:if="${productFeatures.typeOfProduct.equals('desktop')}" th:object="${product}">
+        <table>
+            <tr>
+                <td>Форм-фактор:</td>
+                <td>
+                    <input type="text" th:field="*{formFactor}" placeholder="Форм-фактор">
+                <td th:if="${#fields.hasErrors('formFactor')}" th:errors="*{formFactor}"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="hidden" th:field="*{productFeatures}" th:value="${productFeatures}">
+            </tr>
+        </table>
+        <button type="submit">Готово</button>
+    </form>
+    <form th:if="${productFeatures.typeOfProduct.equals('notebook')}" th:object="${product}">
+        <table>
+            <tr>
+                <td>Размер:</td>
+                <td>
+                    <input type="text" th:field="*{dimensions}" placeholder="Размер">
+                <td th:if="${#fields.hasErrors('dimensions')}" th:errors="*{dimensions}"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="hidden" th:field="*{productFeatures}" th:value="${productFeatures}">
+            </tr>
+        </table>
+        <button type="submit">Готово</button>
+    </form>
+    <form th:if="${productFeatures.typeOfProduct.equals('hardDrive')}" th:object="${product}">
+        <table>
+            <tr>
+                <td>Объем:</td>
+                <td>
+                    <input type="text" th:field="*{space}" placeholder="Объем">
+                <td th:if="${#fields.hasErrors('space')}" th:errors="*{space}"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="hidden" th:field="*{productFeatures}" th:value="${productFeatures}">
+            </tr>
+        </table>
+        <button type="submit">Готово</button>
+    </form>
+    <form th:if="${productFeatures.typeOfProduct.equals('monitor')}" th:object="${product}">
+        <table>
+            <tr>
+                <td>Диагональ в дюймах:</td>
+                <td>
+                    <input type="text" th:field="*{diagonal}" placeholder="Диагональ в дюймах">
+                <td th:if="${#fields.hasErrors('diagonal')}" th:errors="*{diagonal}"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="hidden" th:field="*{productFeatures}" th:value="${productFeatures}">
+            </tr>
+        </table>
+        <button type="submit">Готово</button>
+    </form>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>HomePage</title>
+</head>
+<body>
+<div>Здравствуйте. Выберите действие</div>
+<form th:action="createNewProduct" method="get">
+    <button type="submit">добавить новый продукт</button>
+</form>
+<form th:action="replaceAllDesktops" method="post">
+    <button type="submit">отобразить все настольные компьютеры</button>
+</form>
+<form action="#" th:object="${products}">
+    <table>
+        <tr>
+            <th>Цена</th>
+            <th>Серийный номер</th>
+            <th>Производитель</th>
+            <th>Количество товаров на складе</th>
+            <th>Тип товара</th>
+        </tr>
+        <tr th:each="product: ${products}">
+            <td th:text="${product.getPrice()}"></td>
+            <td th:text="${product.getSerialNumber()}"></td>
+            <td th:text="${product.getManufacturer()}"></td>
+            <td th:text="${product.getUnitsInStock()}"></td>
+            <td th:text="${product.getTypeOfProduct()}"></td>
+            <td><a th:href="@{editProduct/{productID}(productID = ${product.id})}">Редактировать</a></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
