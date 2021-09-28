@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Product</title>
+</head>
+<body>
+<form th:object="${chosenProduct}">
+    <table>
+        <tr>
+            <td>Цена:</td>
+            <td th:text="${chosenProduct.price}"></td>
+            <td th:if="${Id!=null}"> <input type="hidden" th:value="${Id}" th:name="Id"></td>
+        </tr>
+        <tr>
+            <td>Серийный номер:</td>
+            <td th:text="${chosenProduct.serialNumber}"></td>
+        </tr>
+        <tr>
+            <td>Производитель:</td>
+            <td th:text="${chosenProduct.manufacturer}"></td>
+        </tr>
+        <tr>
+            <td>Количество товаров на складе:</td>
+            <td th:text="${chosenProduct.unitsInStock}"></td>
+        </tr>
+        <tr th:if="${chosenProduct.typeOfProduct.equals('desktop')}">
+            <td>Форм-фактор:</td>
+            <td th:text="${chosenProduct.formFactor}"></td>
+        </tr>
+        <tr th:if="${chosenProduct.typeOfProduct.equals('notebook')}">
+            <td>Размер:</td>
+            <td th:text="${chosenProduct.dimensions}"></td>
+        </tr>
+
+        <tr th:if="${chosenProduct.typeOfProduct.equals('hardDrive')}">
+            <td>Объем:</td>
+            <td th:text="${chosenProduct.space}"></td>
+        </tr>
+
+        <tr th:if="${chosenProduct.typeOfProduct.equals('monitor')}">
+            <td>Диагональ в дюймах:</td>
+            <td th:text="${chosenProduct.diagonal}"></td>
+        </tr>
+
+        <tr>
+            <td>Тип товара:</td>
+            <td th:if="${chosenProduct.typeOfProduct.equals('desktop')}">Настольный компьютер</td>
+            <td th:if="${chosenProduct.typeOfProduct.equals('monitor')}">Монитор</td>
+            <td th:if="${chosenProduct.typeOfProduct.equals('hardDrive')}">Жесткий диск</td>
+            <td th:if="${chosenProduct.typeOfProduct.equals('notebook')}">Ноутбук</td>
+        </tr>
+    </table>
+</form>
+<form th:action="@{/}">
+    <button type="submit">Назад</button>
+</form>
+</body>
+</html>

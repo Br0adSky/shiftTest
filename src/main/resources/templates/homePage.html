@@ -28,6 +28,7 @@
 <form action="#" th:object="${products}">
     <table>
         <tr>
+            <th>Идентификатор</th>
             <th>Цена</th>
             <th>Серийный номер</th>
             <th>Производитель</th>
@@ -36,6 +37,7 @@
             <th>Дополнительные свойства</th>
         </tr>
         <tr th:each="product: ${products}">
+            <td><a th:href="@{/show/{Id}(Id = ${product.productId})}">Идентификатор</a></td>
             <td th:text="${product.getPrice()}"></td>
             <td th:text="${product.getSerialNumber()}"></td>
             <td th:text="${product.getManufacturer()}"></td>

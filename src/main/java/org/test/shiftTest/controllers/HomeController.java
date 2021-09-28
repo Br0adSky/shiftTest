@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.test.shiftTest.services.ProductService;
 
@@ -41,6 +42,11 @@ public class HomeController {
     public String replaceAllHardDrives(Model model) {
         productService.replaceHardDrives(model);
         return "homePage";
+    }
+    @GetMapping("show/{Id}")
+    public String show(Model model, @PathVariable Long Id){
+        model.addAttribute("chosenProduct",productService.searchById(Id));
+        return "products/product";
     }
 
 
