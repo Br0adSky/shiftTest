@@ -3,27 +3,22 @@ package org.test.shiftTest.models;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-public class Notebooks extends Products{
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+public class Notebooks extends Products {
     @NotBlank
     private String dimensions;
-    @OneToOne
-    private ProductFeatures productFeatures;
+
 
     public Notebooks() {
     }
 
-    public Notebooks(@NotBlank String dimensions, @NotNull ProductFeatures productFeatures) {
+    public Notebooks(@NotBlank String dimensions) {
         this.dimensions = dimensions;
-        this.productFeatures = productFeatures;
+
     }
 }

@@ -1,29 +1,24 @@
 package org.test.shiftTest.models;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Entity;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
 @Entity
 public class Desktop extends Products{
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
-    @NotBlank
+
     private String formFactor;
-    @OneToOne
-    private ProductFeatures productFeatures;
+
+
+    public Desktop(String serialNumber, String manufacturer, Integer price, Integer unitsInStock, String typeOfProduct) {
+        super(serialNumber, manufacturer, price, unitsInStock, typeOfProduct);
+
+    }
 
     public Desktop() {
     }
 
-    public Desktop(@NotBlank String formFactor, @NotNull ProductFeatures productFeatures) {
-        this.formFactor = formFactor;
-        this.productFeatures = productFeatures;
-    }
 }

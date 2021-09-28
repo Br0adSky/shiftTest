@@ -10,43 +10,43 @@
         <tr>
             <td>Цена:</td>
             <td>
-                <input type="text" th:field="*{price}" th:value="${price}" placeholder="Цена">
+                <input type="text" th:field="*{price}" th:value="${productInEdit.price}">
             <td th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></td>
         </tr>
         <tr>
             <td>Серийный номер:</td>
             <td>
-                <input type="text" th:field="*{serialNumber}" th:value="${serialNumber}" placeholder="Серийный номер">
+                <input type="text" th:field="*{serialNumber}" th:value="${productInEdit.serialNumber}">
             <td th:if="${#fields.hasErrors('serialNumber')}" th:errors="*{serialNumber}"></td>
         </tr>
         <tr>
             <td>Производитель:</td>
             <td>
-                <input type="text" th:field="*{manufacturer}" th:value="${manufacturer}" placeholder="Производитель">
+                <input type="text" th:field="*{manufacturer}" th:value="${productInEdit.manufacturer}">
             <td th:if="${#fields.hasErrors('manufacturer')}" th:errors="*{manufacturer}"></td>
         </tr>
         <tr>
             <td>Количество товаров на складе:</td>
             <td>
-                <input type="text" th:field="*{unitsInStock}" th:value="${unitsInStock}" placeholder="Количество товаров на складе">
+                <input type="text" th:field="*{unitsInStock}" th:value="${productInEdit.unitsInStock}">
             <td th:if="${#fields.hasErrors('unitsInStock')}" th:errors="*{unitsInStock}"></td>
         </tr>
         <tr>
             <td>Выберите тип товара:</td>
             <td><div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" id="desktop" th:name="typeOfProduct" th:value="${typeOfProduct}">
+                <input type="radio" id="desktop" th:name="typeOfProduct" th:value="${productInEdit.typeOfProduct}">
                 <label class="custom-control-label" for="desktop">Настольный компьютер</label>
             </div>
                 <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="notebook" th:name="typeOfProduct" th:value="${typeOfProduct}">
+                    <input type="radio" id="notebook" th:name="typeOfProduct" th:value="${productInEdit.typeOfProduct}">
                     <label class="custom-control-label" for="notebook">Ноутбук</label>
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="monitor" th:name="typeOfProduct" th:value="${typeOfProduct}">
+                    <input type="radio" id="monitor" th:name="typeOfProduct" th:value="${productInEdit.typeOfProduct}">
                     <label class="custom-control-label" for="monitor">Монитор</label>
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="hardDrive" th:name="typeOfProduct" th:value="${typeOfProduct}">
+                    <input type="radio" id="hardDrive" th:name="typeOfProduct" th:value="${productInEdit.typeOfProduct}">
                     <label class="custom-control-label" for="hardDrive">Жесткий диск</label>
                 </div>
             </td>

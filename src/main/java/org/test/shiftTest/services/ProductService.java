@@ -6,53 +6,29 @@ import org.springframework.ui.Model;
 import org.test.shiftTest.models.*;
 import org.test.shiftTest.repositorys.*;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @Service
 public class ProductService {
-    private final ProductsFeaturesRepo productsFeaturesRepo;
     private final DesktopRepo desktopRepo;
     private final NotebookRepo notebookRepo;
     private final HardDriveRepo hardDriveRepo;
     private final MonitorRepo monitorRepo;
+    private final ProductRepo productRepo;
 
     @Autowired
-    public ProductService(ProductsFeaturesRepo productsFeaturesRepo, DesktopRepo desktopRepo, NotebookRepo notebookRepo, HardDriveRepo hardDriveRepo, MonitorRepo monitorRepo) {
-        this.productsFeaturesRepo = productsFeaturesRepo;
+    public ProductService(ProductRepo productRepo, DesktopRepo desktopRepo, NotebookRepo notebookRepo, HardDriveRepo hardDriveRepo, MonitorRepo monitorRepo) {
         this.desktopRepo = desktopRepo;
         this.notebookRepo = notebookRepo;
         this.hardDriveRepo = hardDriveRepo;
         this.monitorRepo = monitorRepo;
+        this.productRepo = productRepo;
+
     }
 
-    public void createNewProduct(Model model) {
-        ProductFeatures productFeatures = new ProductFeatures();
-        model.addAttribute("productFeatures", productFeatures);
-    }
-
-    public void addNewProduct(ProductFeatures productFeatures, Model model) {
-        productsFeaturesRepo.save(productFeatures);
-        Products products;
-        switch (productFeatures.getTypeOfProduct()) {
-            case "desktop":
-                products = new Desktop();
-                break;
-            case "notebook":
-                products = new Notebooks();
-                break;
-            case "hardDrive":
-                products = new HardDrive();
-                break;
-            case "monitor":
-                products = new Monitor();
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + productFeatures.getTypeOfProduct());
-
-        }
-        products.setProductFeatures(productFeatures);
-        model.addAttribute("product", products);
-    }
-
-    public void saveExtraFeatures(Products product) {
+    public void saveProducts(Products product) {
         if (product instanceof Monitor) {
             monitorRepo.save((Monitor) product);
             return;
@@ -70,32 +46,43 @@ public class ProductService {
         }
     }
 
+    public void addNewProduct(Products product, Model model) {
+        Products productEF = new Products();
+        switch (product.getTypeOfProduct()) {
+            case "desktop":
+//                productEF = new Desktop(product.getSerialNumber(),product.getManufacturer(),product.getPrice(),product.getUnitsInStock(),
+//                product.getTypeOfProduct());
+                product = (Desktop) product;
+                break;
+            case "notebook":
+                notebookRepo.save((Notebooks) product);
+                break;
+            case "hardDrive":
+                hardDriveRepo.save((HardDrive) product);
+                break;
+            case "monitor":
+                monitorRepo.save((Monitor) product);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + product.getTypeOfProduct());
+        }
+        model.addAttribute("productEF", product);
+    }
+
+
     public void replaceDesktops(Model model) {
-        model.addAttribute("products", productsFeaturesRepo.findAllByTypeOfProduct("desktop"));
+        model.addAttribute("products", desktopRepo.findAll());
     }
 
     public void replaceProducts(Model model) {
-        model.addAttribute("products", productsFeaturesRepo.findAll());
+        model.addAttribute("products", Stream.of(desktopRepo.findAll(), notebookRepo.findAll(),
+                        hardDriveRepo.findAll(), monitorRepo.findAll())
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList()));
     }
 
-    public void editProduct(ProductFeatures productFeatures, Model model) {
-        System.out.println(desktopRepo.findDesktopsByProductFeatures(productFeatures));
-        model.addAttribute("productInEdit", productFeatures);
-        Products product;
-        if (monitorRepo.findMonitorByProductFeatures(productFeatures) != null) {
-            product = monitorRepo.findMonitorByProductFeatures(productFeatures);
-        } else if (notebookRepo.findNotebooksByProductFeatures(productFeatures) != null) {
-            product = notebookRepo.findNotebooksByProductFeatures(productFeatures);
-        } else if (desktopRepo.findDesktopsByProductFeatures(productFeatures) != null) {
-            product = desktopRepo.findDesktopsByProductFeatures(productFeatures);
-        } else {
-            product = hardDriveRepo.findHardDriveByProductFeatures(productFeatures);
-        }
-        model.addAttribute("extraFeatureInEdit", product);
 
-    }
-
-    public void saveEditedProduct(ProductFeatures productFeatures) {
-        productsFeaturesRepo.save(productFeatures);
-    }
+//    public void saveEditedProduct(ProductFeatures productFeatures) {
+//        productsFeaturesRepo.save(productFeatures);
+//    }
 }
