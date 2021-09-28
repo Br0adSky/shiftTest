@@ -7,7 +7,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.test.shiftTest.models.Products;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.test.shiftTest.models.*;
 import org.test.shiftTest.services.ProductService;
 
 import javax.validation.Valid;
@@ -21,55 +22,79 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping(("createNewProduct"))
-    public String createNewProduct(Model model) {
-        model.addAttribute("product", new Products());
+    @PostMapping("chooseTypeOfProduct")
+    public String chooseTOP(Model model, @RequestParam String typeOfProduct) {
+        model.addAttribute("TOP", typeOfProduct);
+        Products product;
+        switch (typeOfProduct) {
+            case "desktop":
+                product = new Desktop();
+                break;
+            case "notebook":
+                product = new Notebooks();
+                break;
+            case "hardDrive":
+                product = new HardDrive();
+                break;
+            case "monitor":
+                product = new Monitor();
+                break;
+            default:
+                throw new IllegalStateException("Product has no type");
+        }
+        product.setTypeOfProduct(typeOfProduct);
+        System.out.println(product.getClass());
+        model.addAttribute("product", product);
         return "products/addNewProduct";
     }
 
-    @PostMapping("addNewProduct")
-    public String addNewProduct(@Valid Products product, BindingResult bindingResult, Model model) {
+    @GetMapping(("createNewProduct"))
+    public String createNewProduct() {
+        return "products/typeOfProduct";
+    }
+
+    @PostMapping("addNewProduct/desktop")
+    public String saveDesktop(@Valid Desktop product, @RequestParam(required = false) Long Id, BindingResult bindingResult, Model model) {
+        checkErrors(product, "product", bindingResult, model, "products/addNewProduct");
+        productService.addNewProduct(product, Id);
+        return "redirect:/";
+    }
+
+    @PostMapping("addNewProduct/notebook")
+    public String saveNotebook(@Valid Notebooks product, @RequestParam(required = false) Long Id, BindingResult bindingResult, Model model) {
+        checkErrors(product, "product", bindingResult, model, "products/addNewProduct");
+        productService.addNewProduct(product, Id);
+        return "redirect:/";
+    }
+
+    @PostMapping("addNewProduct/hardDrive")
+    public String saveHardDrive(@Valid HardDrive product, @RequestParam(required = false) Long Id, BindingResult bindingResult, Model model) {
+        checkErrors(product, "product", bindingResult, model, "products/addNewProduct");
+        productService.addNewProduct(product, Id);
+        return "redirect:/";
+    }
+    @PostMapping("addNewProduct/monitor")
+    public String saveMonitor(@Valid Monitor product, @RequestParam(required = false) Long Id, BindingResult bindingResult, Model model) {
+        checkErrors(product, "product", bindingResult, model, "products/addNewProduct");
+        productService.addNewProduct(product, Id);
+        return "redirect:/";
+    }
+
+    private String checkErrors(Products product, String productAttribute, BindingResult bindingResult,
+                               Model model, String page) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("product", product);
-            return "products/addNewProduct";
+            model.addAttribute("TOP", product.getTypeOfProduct());
+            model.addAttribute(productAttribute, product);
+            return page;
         }
-        productService.addNewProduct(product, model);
+        return null;
+    }
+
+    @GetMapping("editProduct/{Id}")
+    public String editProduct(@PathVariable Long Id, Model model) {
+        Products product = productService.searchById(Id);
+        model.addAttribute("TOP", product.getTypeOfProduct());
         model.addAttribute("product", product);
-        return "products/extraFeaturesPage";
-    }
-
-    @PostMapping("extraFeatures")
-    public String extraFeatures(@Valid Products productEF, BindingResult bindingResult, Model model) {
-
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("product", productEF);
-            return "products/extraFeaturesPage";
-        }
-        productService.saveProducts(productEF);
-        return "redirect:/";
-    }
-    @GetMapping("editProduct/{productID}")
-    public String editProduct(@PathVariable Products productID, Model model) {
-        model.addAttribute("productInEdit", productID);
-        return "products/editProductPage";
-    }
-
-    @PostMapping("editProduct/saveEdited")
-    public String editExtraFeature(@Valid Products product, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("productFeatures", product);
-            return "products/editProductPage";
-        }
-        productService.saveProducts(product);
-        return "products/editExtraFeaturePage";
-    }
-    @PostMapping("editProduct/saveEditedExtraFeature")
-    public String saveEdited(@Valid Products product, BindingResult bindingResult, Model model){
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("extraFeatureInEdit", product);
-            return "products/editExtraFeaturePage";
-        }
-        productService.saveProducts(product);
-        return "redirect:/";
+        return "products/addNewProduct";
     }
 }

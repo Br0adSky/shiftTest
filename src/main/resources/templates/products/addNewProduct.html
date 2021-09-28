@@ -5,13 +5,14 @@
     <title>Add new product</title>
 </head>
 <body>
-<form method="post" th:action="@{addNewProduct}" th:object="${product}">
+<form method="post" th:action="@{/addNewProduct/{TOP}(TOP=${TOP})}" th:object="${product}">
     <table>
         <tr>
             <td>Цена:</td>
             <td>
-                <input type="text" th:field="*{price}" placeholder="Цена">
+                <input type="text" th:field="*{price}" th:value="*{price}" placeholder="Цена">
             <td th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></td>
+            <td th:if="${Id!=null}"> <input type="hidden" th:value="${Id}" th:name="Id"></td>
         </tr>
         <tr>
             <td>Серийный номер:</td>
@@ -32,24 +33,34 @@
             <td th:if="${#fields.hasErrors('unitsInStock')}" th:errors="*{unitsInStock}"></td>
         </tr>
         <tr>
-            <td>Выберите тип товара:</td>
-            <td><div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" id="desktop" th:name="typeOfProduct" value="desktop">
-                <label class="custom-control-label" for="desktop">Настольный компьютер</label>
-            </div>
-                <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="notebook" th:name="typeOfProduct" value="notebook">
-                    <label class="custom-control-label" for="notebook">Ноутбук</label>
-                </div>
-                <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="monitor" th:name="typeOfProduct" value="monitor">
-                    <label class="custom-control-label" for="monitor">Монитор</label>
-                </div>
-                <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="hardDrive" th:name="typeOfProduct" value="hardDrive">
-                    <label class="custom-control-label" for="hardDrive">Жесткий диск</label>
-                </div>
-            </td>
+            <td><input type="hidden" th:field="*{typeOfProduct}" th:value="${TOP}"></td>
+        </tr>
+        <tr th:if="${TOP.equals('desktop')}">
+            <td>Форм-фактор:</td>
+            <td>
+                <input type="text" th:field="*{formFactor}" placeholder="Форм-фактор">
+            <td th:if="${#fields.hasErrors('formFactor')}" th:errors="*{formFactor}"></td>
+        </tr>
+
+        <tr th:if="${TOP.equals('notebook')}">
+            <td>Размер:</td>
+            <td>
+                <input type="text" th:field="*{dimensions}" placeholder="Размер в дюймах">
+            <td th:if="${#fields.hasErrors('dimensions')}" th:errors="*{dimensions}"></td>
+        </tr>
+
+        <tr th:if="${TOP.equals('hardDrive')}">
+            <td>Объем:</td>
+            <td>
+                <input type="text" th:field="*{space}" placeholder="Объем в гб">
+            <td th:if="${#fields.hasErrors('space')}" th:errors="*{space}"></td>
+        </tr>
+
+        <tr th:if="${TOP.equals('monitor')}">
+            <td>Диагональ в дюймах:</td>
+            <td>
+                <input type="text" th:field="*{diagonal}" placeholder="Диагональ в дюймах">
+            <td th:if="${#fields.hasErrors('diagonal')}" th:errors="*{diagonal}"></td>
         </tr>
     </table>
     <button type="submit">Далее</button>

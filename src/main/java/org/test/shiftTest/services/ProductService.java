@@ -6,29 +6,30 @@ import org.springframework.ui.Model;
 import org.test.shiftTest.models.*;
 import org.test.shiftTest.repositorys.*;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 @Service
 public class ProductService {
-    private final DesktopRepo desktopRepo;
-    private final NotebookRepo notebookRepo;
-    private final HardDriveRepo hardDriveRepo;
-    private final MonitorRepo monitorRepo;
-    private final ProductRepo productRepo;
+    private final ProductRepo<Products> productRepo;
+    private final ProductRepo<Desktop> desktopRepo;
+    private final ProductRepo<Notebooks> notebookRepo;
+    private final ProductRepo<HardDrive> hardDriveRepo;
+    private final ProductRepo<Monitor> monitorRepo;
 
     @Autowired
-    public ProductService(ProductRepo productRepo, DesktopRepo desktopRepo, NotebookRepo notebookRepo, HardDriveRepo hardDriveRepo, MonitorRepo monitorRepo) {
+    public ProductService(ProductRepo<Products> productRepo, ProductRepo<Desktop> desktopRepo, ProductRepo<Notebooks> notebookRepo,
+                          ProductRepo<HardDrive> hardDriveRepo, ProductRepo<Monitor> monitorRepo) {
+        this.productRepo = productRepo;
         this.desktopRepo = desktopRepo;
         this.notebookRepo = notebookRepo;
         this.hardDriveRepo = hardDriveRepo;
         this.monitorRepo = monitorRepo;
-        this.productRepo = productRepo;
 
     }
 
-    public void saveProducts(Products product) {
+    public void addNewProduct(Products product, Long id) {
+        if (id != null && searchById(id) != null) {
+            product.setProductId(searchById(id).getProductId());
+        }
+
         if (product instanceof Monitor) {
             monitorRepo.save((Monitor) product);
             return;
@@ -46,43 +47,24 @@ public class ProductService {
         }
     }
 
-    public void addNewProduct(Products product, Model model) {
-        Products productEF = new Products();
-        switch (product.getTypeOfProduct()) {
-            case "desktop":
-//                productEF = new Desktop(product.getSerialNumber(),product.getManufacturer(),product.getPrice(),product.getUnitsInStock(),
-//                product.getTypeOfProduct());
-                product = (Desktop) product;
-                break;
-            case "notebook":
-                notebookRepo.save((Notebooks) product);
-                break;
-            case "hardDrive":
-                hardDriveRepo.save((HardDrive) product);
-                break;
-            case "monitor":
-                monitorRepo.save((Monitor) product);
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + product.getTypeOfProduct());
-        }
-        model.addAttribute("productEF", product);
-    }
-
-
     public void replaceDesktops(Model model) {
-        model.addAttribute("products", desktopRepo.findAll());
+        model.addAttribute("products", desktopRepo.findByTypeOfProduct("desktop"));
+    }
+    public void replaceNotebooks(Model model) {
+        model.addAttribute("products", notebookRepo.findByTypeOfProduct("notebook"));
+    }
+    public void replaceHardDrives(Model model) {
+        model.addAttribute("products", hardDriveRepo.findByTypeOfProduct("hardDrive"));
+    }
+    public void replaceMonitors(Model model) {
+        model.addAttribute("products", monitorRepo.findByTypeOfProduct("monitor"));
     }
 
     public void replaceProducts(Model model) {
-        model.addAttribute("products", Stream.of(desktopRepo.findAll(), notebookRepo.findAll(),
-                        hardDriveRepo.findAll(), monitorRepo.findAll())
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList()));
+        model.addAttribute("products", productRepo.findAll());
     }
 
-
-//    public void saveEditedProduct(ProductFeatures productFeatures) {
-//        productsFeaturesRepo.save(productFeatures);
-//    }
+    public Products searchById(Long id) {
+        return productRepo.findById(id).get();
+    }
 }

@@ -27,6 +27,21 @@ public class HomeController {
         productService.replaceDesktops(model);
         return "homePage";
     }
+    @PostMapping(("replaceAllNotebooks"))
+    public String replaceAllNotebooks(Model model) {
+        productService.replaceNotebooks(model);
+        return "homePage";
+    }
+    @PostMapping(("replaceAllMonitors"))
+    public String replaceAllMonitors(Model model) {
+        productService.replaceMonitors(model);
+        return "homePage";
+    }
+    @PostMapping(("replaceAllHardDrives"))
+    public String replaceAllHardDrives(Model model) {
+        productService.replaceHardDrives(model);
+        return "homePage";
+    }
 
 
 }

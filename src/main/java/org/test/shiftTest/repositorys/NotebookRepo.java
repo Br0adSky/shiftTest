@@ -6,5 +6,4 @@ import org.test.shiftTest.models.Notebooks;
 
 @Repository
 public interface NotebookRepo extends JpaRepository<Notebooks, Long>{
-
 }

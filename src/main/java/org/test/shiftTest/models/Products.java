@@ -1,15 +1,14 @@
 package org.test.shiftTest.models;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
-@Getter
-@Setter
-@MappedSuperclass
+@Data
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Products {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

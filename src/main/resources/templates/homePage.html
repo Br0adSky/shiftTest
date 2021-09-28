@@ -9,8 +9,21 @@
 <form th:action="createNewProduct" method="get">
     <button type="submit">добавить новый продукт</button>
 </form>
-<form th:action="replaceAllDesktops" method="post">
+<form th:action="@{/replaceAllDesktops}" method="post">
     <button type="submit">отобразить все настольные компьютеры</button>
+</form>
+
+<form th:action="@{/replaceAllNotebooks}" method="post">
+    <button type="submit">отобразить все ноутбуки</button>
+</form>
+<form th:action="@{/replaceAllMonitors}" method="post">
+    <button type="submit">отобразить все мониторы</button>
+</form>
+<form th:action="@{/replaceAllHardDrives}" method="post">
+    <button type="submit">отобразить все жесткие диски</button>
+</form>
+<form th:action="@{/}" method="get">
+    <button type="submit">отобразить все продукты</button>
 </form>
 <form action="#" th:object="${products}">
     <table>
@@ -20,6 +33,7 @@
             <th>Производитель</th>
             <th>Количество товаров на складе</th>
             <th>Тип товара</th>
+            <th>Дополнительные свойства</th>
         </tr>
         <tr th:each="product: ${products}">
             <td th:text="${product.getPrice()}"></td>
@@ -27,7 +41,11 @@
             <td th:text="${product.getManufacturer()}"></td>
             <td th:text="${product.getUnitsInStock()}"></td>
             <td th:text="${product.getTypeOfProduct()}"></td>
-            <td><a th:href="@{editProduct/{productID}(productID = ${product.id})}">Редактировать</a></td>
+            <td th:if="${product.typeOfProduct.equals('desktop')}" th:text="${product.formFactor}"></td>
+            <td th:if="${product.typeOfProduct.equals('hardDrive')}"th:text="${product.space}" ></td>
+            <td th:if="${product.typeOfProduct.equals('monitor')}" th:text="${product.diagonal}"></td>
+            <td th:if="${product.typeOfProduct.equals('notebook')}" th:text="${product.dimensions}"></td>
+            <td><a th:href="@{/editProduct/{Id}(Id = ${product.productId})}">Редактировать</a></td>
         </tr>
     </table>
 </form>

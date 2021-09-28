@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Choose type product</title>
+</head>
+<body>
+<form method="post" th:action="@{chooseTypeOfProduct}">
+    Выберите тип товара:
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" id="desktop" th:name="typeOfProduct" value="desktop">
+        <label class="custom-control-label" for="desktop">Настольный компьютер</label>
+    </div>
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" id="notebook" th:name="typeOfProduct" value="notebook">
+        <label class="custom-control-label" for="notebook">Ноутбук</label>
+    </div>
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" id="monitor" th:name="typeOfProduct" value="monitor">
+        <label class="custom-control-label" for="monitor">Монитор</label>
+    </div>
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" id="hardDrive" th:name="typeOfProduct" value="hardDrive">
+        <label class="custom-control-label" for="hardDrive">Жесткий диск</label>
+    </div>
+    <button type="submit">Далее</button>
+</form>
+</body>
+</html>
