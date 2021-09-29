@@ -1,24 +1,24 @@
 package org.test.shiftTest.models;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Entity;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 
 @EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
 @Entity
 public class HardDrive extends Products {
-    @Min(0)
-    private Integer space;
 
+    @Positive(message = "Такого объема не существует")
+    private Integer space;
 
     public HardDrive(Integer space) {
         this.space = space;
     }
 
-    public HardDrive() {
-
-    }
+    public HardDrive() {}
 }

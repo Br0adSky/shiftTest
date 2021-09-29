@@ -22,6 +22,26 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @GetMapping("editProduct/{Id}")
+    public String editProduct(@PathVariable Long Id, Model model) {
+        Products product = productService.searchById(Id);
+        model.addAttribute("TOP", product.getTypeOfProduct());
+        model.addAttribute("product", product);
+        return "products/addNewProduct";
+    }
+
+    @GetMapping("deleteProduct/{Id}")
+    public String deleteProduct(@PathVariable Long Id, Model model) {
+        Products product = productService.searchById(Id);
+        model.addAttribute("product", product);
+        return "products/deleteProduct";
+    }
+    @PostMapping("submitDelete")
+    public String submitDelete(@RequestParam Long productId){
+        productService.deleteProduct(productId);
+        return "redirect:/";
+    }
+
     @PostMapping("chooseTypeOfProduct")
     public String chooseTOP(Model model, @RequestParam String typeOfProduct) {
         model.addAttribute("TOP", typeOfProduct);
@@ -43,7 +63,6 @@ public class ProductController {
                 throw new IllegalStateException("Product has no type");
         }
         product.setTypeOfProduct(typeOfProduct);
-        System.out.println(product.getClass());
         model.addAttribute("product", product);
         return "products/addNewProduct";
     }
@@ -54,47 +73,39 @@ public class ProductController {
     }
 
     @PostMapping("addNewProduct/desktop")
-    public String saveDesktop(@Valid Desktop product, @RequestParam(required = false) Long Id, BindingResult bindingResult, Model model) {
-        checkErrors(product, "product", bindingResult, model, "products/addNewProduct");
-        productService.addNewProduct(product, Id);
-        return "redirect:/";
+    public String saveDesktop(@RequestParam(required = false) Long Id,
+                              @Valid Desktop product,BindingResult bindingResult, Model model) {
+        return checkErrors(product, bindingResult, model, "product",
+                "products/addNewProduct", "redirect:/", Id);
     }
 
     @PostMapping("addNewProduct/notebook")
-    public String saveNotebook(@Valid Notebooks product, @RequestParam(required = false) Long Id, BindingResult bindingResult, Model model) {
-        checkErrors(product, "product", bindingResult, model, "products/addNewProduct");
-        productService.addNewProduct(product, Id);
-        return "redirect:/";
+    public String saveNotebook(@Valid Notebooks product, BindingResult bindingResult,
+                               Model model, @RequestParam(required = false) Long Id) {
+        return checkErrors(product, bindingResult, model, "product",
+                "products/addNewProduct", "redirect:/", Id);
     }
 
     @PostMapping("addNewProduct/hardDrive")
-    public String saveHardDrive(@Valid HardDrive product, @RequestParam(required = false) Long Id, BindingResult bindingResult, Model model) {
-        checkErrors(product, "product", bindingResult, model, "products/addNewProduct");
-        productService.addNewProduct(product, Id);
-        return "redirect:/";
-    }
-    @PostMapping("addNewProduct/monitor")
-    public String saveMonitor(@Valid Monitor product, @RequestParam(required = false) Long Id, BindingResult bindingResult, Model model) {
-        checkErrors(product, "product", bindingResult, model, "products/addNewProduct");
-        productService.addNewProduct(product, Id);
-        return "redirect:/";
+    public String saveHardDrive(@Valid HardDrive product, BindingResult bindingResult, Model model, @RequestParam(required = false) Long Id) {
+        return checkErrors(product, bindingResult, model, "product",
+                "products/addNewProduct", "redirect:/", Id);
     }
 
-    private String checkErrors(Products product, String productAttribute, BindingResult bindingResult,
-                               Model model, String page) {
+    @PostMapping("addNewProduct/monitor")
+    public String saveMonitor(@Valid Monitor product, BindingResult bindingResult, Model model, @RequestParam(required = false) Long Id) {
+        return checkErrors(product, bindingResult, model, "product",
+                "products/addNewProduct", "redirect:/", Id);
+    }
+
+    public String checkErrors(@Valid Products product, BindingResult bindingResult, Model model,
+                              String productAttribute, String errorPage, String mainPage, Long id) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("TOP", product.getTypeOfProduct());
             model.addAttribute(productAttribute, product);
-            return page;
+            return errorPage;
         }
-        return null;
-    }
-
-    @GetMapping("editProduct/{Id}")
-    public String editProduct(@PathVariable Long Id, Model model) {
-        Products product = productService.searchById(Id);
-        model.addAttribute("TOP", product.getTypeOfProduct());
-        model.addAttribute("product", product);
-        return "products/addNewProduct";
+        productService.saveProduct(product, id);
+        return mainPage;
     }
 }

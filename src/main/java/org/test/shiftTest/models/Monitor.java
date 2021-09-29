@@ -1,25 +1,24 @@
 package org.test.shiftTest.models;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Entity;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 
 @EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
 @Entity
 public class Monitor extends Products {
 
-    @Min(1)
+    @Positive(message = "Такой диагонали не существует")
     private Integer diagonal;
-
 
     public Monitor(Integer diagonal) {
         this.diagonal = diagonal;
     }
 
-    public Monitor() {
-
-    }
+    public Monitor() {}
 }

@@ -9,8 +9,7 @@
     <table>
         <tr>
             <td>Цена:</td>
-            <td>
-                <input type="text" th:field="*{price}" th:value="*{price}" placeholder="Цена">
+            <td><input type="text" th:field="*{price}" th:value="*{price}" placeholder="Цена">
             <td th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></td>
             <td th:if="${Id!=null}"> <input type="hidden" th:value="${Id}" th:name="Id"></td>
         </tr>
@@ -37,8 +36,7 @@
         </tr>
         <tr th:if="${TOP.equals('desktop')}">
             <td>Форм-фактор:</td>
-            <td>
-                <input type="text" th:field="*{formFactor}" placeholder="Форм-фактор">
+            <td><input type="text" th:field="*{formFactor}" placeholder="Форм-фактор">
             <td th:if="${#fields.hasErrors('formFactor')}" th:errors="*{formFactor}"></td>
         </tr>
 

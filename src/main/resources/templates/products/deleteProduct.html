@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>delete product</title>
+</head>
+<body>
+<form th:action="@{/submitDelete}" method="post">
+    <div>Уверены, что хотите удалить продукт?</div>
+    <input type="hidden" th:value="${product.getProductId()}" th:name="productId">
+    <button type="submit">Да</button>
+</form>
+<form th:action="@{/}">
+    <button type="submit">Нет</button>
+</form>
+</body>
+</html>

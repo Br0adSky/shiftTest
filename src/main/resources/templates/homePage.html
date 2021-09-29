@@ -48,6 +48,7 @@
             <td th:if="${product.typeOfProduct.equals('monitor')}" th:text="${product.diagonal}"></td>
             <td th:if="${product.typeOfProduct.equals('notebook')}" th:text="${product.dimensions}"></td>
             <td><a th:href="@{/editProduct/{Id}(Id = ${product.productId})}">Редактировать</a></td>
+            <td><a th:href="@{/deleteProduct/{Id}(Id = ${product.productId})}">Удалить продукт</a></td>
         </tr>
     </table>
 </form>
