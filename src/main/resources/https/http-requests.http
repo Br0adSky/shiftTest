@@ -1,0 +1,58 @@
+GET http://localhost:8080/rest/product/show/1
+Accept: application/json
+
+###
+POST http://localhost:8080/rest/product/add
+Content-Type: application/json
+
+{
+  "type": "org.test.shiftTest.models.Desktop",
+  "productId": 0,
+  "serialNumber": "12345",
+  "manufacturer": "Huawei",
+  "price": 2,
+  "unitsInStock": 2,
+  "typeOfProduct": "DESKTOP",
+  "formFactor": "MONO_BLOCK"
+}
+
+###
+PUT http://localhost:8080/rest/product/edit
+Content-Type: application/json
+
+{
+  "type": "org.test.shiftTest.models.Desktop",
+  "productId": 1,
+  "serialNumber": "1234",
+  "manufacturer": "Hi",
+  "price": 2,
+  "unitsInStock": 2,
+  "typeOfProduct": "DESKTOP",
+  "formFactor": "DESKTOP"
+}
+
+###
+GET http://localhost:8080/rest/product/replaceAll/desktop
+Accept: application/json
+
+###
+DELETE http://localhost:8080/rest/product/1
+###
+POST http://localhost:8080/rest/product/add
+Content-Type: application/json
+
+{
+  "type": "org.test.shiftTest.models.Notebooks",
+  "productId": 0,
+  "serialNumber": "12345",
+  "manufacturer": "SS",
+  "price": 5,
+  "unitsInStock": 2,
+  "typeOfProduct": "NOTEBOOK",
+  "dimensions": "INCHES_15"
+}
+
+
+
+
+

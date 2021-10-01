@@ -24,31 +24,31 @@
             <td>Количество товаров на складе:</td>
             <td th:text="${chosenProduct.unitsInStock}"></td>
         </tr>
-        <tr th:if="${chosenProduct.typeOfProduct.equals('desktop')}">
+        <tr th:if="${chosenProduct.typeOfProduct==chosenProduct.typeOfProduct.DESKTOP}">
             <td>Форм-фактор:</td>
             <td th:text="${chosenProduct.formFactor}"></td>
         </tr>
-        <tr th:if="${chosenProduct.typeOfProduct.equals('notebook')}">
+        <tr th:if="${chosenProduct.typeOfProduct==chosenProduct.typeOfProduct.NOTEBOOK}">
             <td>Размер:</td>
-            <td th:text="${chosenProduct.dimensions}"></td>
+            <td th:text="${chosenProduct.dimensions.value}"></td>
         </tr>
 
-        <tr th:if="${chosenProduct.typeOfProduct.equals('hardDrive')}">
+        <tr th:if="${chosenProduct.typeOfProduct==chosenProduct.typeOfProduct.HARD_DRIVE}">
             <td>Объем:</td>
             <td th:text="${chosenProduct.space}"></td>
         </tr>
 
-        <tr th:if="${chosenProduct.typeOfProduct.equals('monitor')}">
+        <tr th:if="${chosenProduct.typeOfProduct==chosenProduct.typeOfProduct.MONITOR}">
             <td>Диагональ в дюймах:</td>
             <td th:text="${chosenProduct.diagonal}"></td>
         </tr>
 
         <tr>
             <td>Тип товара:</td>
-            <td th:if="${chosenProduct.typeOfProduct.equals('desktop')}">Настольный компьютер</td>
-            <td th:if="${chosenProduct.typeOfProduct.equals('monitor')}">Монитор</td>
-            <td th:if="${chosenProduct.typeOfProduct.equals('hardDrive')}">Жесткий диск</td>
-            <td th:if="${chosenProduct.typeOfProduct.equals('notebook')}">Ноутбук</td>
+            <td th:if="${chosenProduct.typeOfProduct==chosenProduct.typeOfProduct.DESKTOP}" th:text="${chosenProduct.typeOfProduct.DESKTOP.value}"></td>
+            <td th:if="${chosenProduct.typeOfProduct==chosenProduct.typeOfProduct.MONITOR}" th:text="${chosenProduct.typeOfProduct.MONITOR.value}"></td>
+            <td th:if="${chosenProduct.typeOfProduct==chosenProduct.typeOfProduct.HARD_DRIVE}" th:text="${chosenProduct.typeOfProduct.HARD_DRIVE.value}"></td>
+            <td th:if="${chosenProduct.typeOfProduct==chosenProduct.typeOfProduct.NOTEBOOK}" th:text="${chosenProduct.typeOfProduct.NOTEBOOK.value}"></td>
         </tr>
     </table>
 </form>

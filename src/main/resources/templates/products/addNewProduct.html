@@ -9,55 +9,58 @@
     <table>
         <tr>
             <td>Цена:</td>
-            <td><input type="text" th:field="*{price}" th:value="*{price}" placeholder="Цена">
+            <td><input type="text" th:field="*{price}" th:value="${product.price}" placeholder="Цена">
             <td th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></td>
-            <td th:if="${Id!=null}"> <input type="hidden" th:value="${Id}" th:name="Id"></td>
         </tr>
         <tr>
             <td>Серийный номер:</td>
             <td>
-                <input type="text" th:field="*{serialNumber}" placeholder="Серийный номер">
+                <input type="text" th:field="*{serialNumber}" th:value="${product.serialNumber}" placeholder="Серийный номер">
             <td th:if="${#fields.hasErrors('serialNumber')}" th:errors="*{serialNumber}"></td>
         </tr>
         <tr>
             <td>Производитель:</td>
             <td>
-                <input type="text" th:field="*{manufacturer}" placeholder="Производитель">
+                <input type="text" th:field="*{manufacturer}" th:value="${product.manufacturer}" placeholder="Производитель">
             <td th:if="${#fields.hasErrors('manufacturer')}" th:errors="*{manufacturer}"></td>
         </tr>
         <tr>
             <td>Количество товаров на складе:</td>
             <td>
-                <input type="text" th:field="*{unitsInStock}" placeholder="Количество товаров на складе">
+                <input type="text" th:field="*{unitsInStock}" th:value="${product.unitsInStock}" placeholder="Количество товаров на складе">
             <td th:if="${#fields.hasErrors('unitsInStock')}" th:errors="*{unitsInStock}"></td>
         </tr>
         <tr>
             <td><input type="hidden" th:field="*{typeOfProduct}" th:value="${TOP}"></td>
+            <td><input type="hidden" th:field="*{productId}" th:value="${product.getProductId()}"></td>
         </tr>
-        <tr th:if="${TOP.equals('desktop')}">
+        <tr th:if="${TOP==TOP.DESKTOP}">
             <td>Форм-фактор:</td>
-            <td><input type="text" th:field="*{formFactor}" placeholder="Форм-фактор">
-            <td th:if="${#fields.hasErrors('formFactor')}" th:errors="*{formFactor}"></td>
+            <td><select name="formFactor" th:field="*{formFactor}" th:value="${product.formFactor}">
+                <option th:each="fFopt : ${T(org.test.shiftTest.models.FormFactor).values()}"
+                        th:value="${fFopt}" th:text="${fFopt}"></option>
+            </select></td>
         </tr>
 
-        <tr th:if="${TOP.equals('notebook')}">
+        <tr th:if="${TOP==TOP.NOTEBOOK}">
             <td>Размер:</td>
-            <td>
-                <input type="text" th:field="*{dimensions}" placeholder="Размер в дюймах">
-            <td th:if="${#fields.hasErrors('dimensions')}" th:errors="*{dimensions}"></td>
+            <td><select name="dimensions" th:field="*{dimensions}" th:value="${product.dimensions}">
+                <option th:each="dopt : ${T(org.test.shiftTest.models.Dimensions).values()}"
+                        th:value="${dopt}" th:text="${dopt.value}"></option>
+            </select></td>
         </tr>
 
-        <tr th:if="${TOP.equals('hardDrive')}">
+        <tr th:if="${TOP==TOP.HARD_DRIVE}">
             <td>Объем:</td>
             <td>
-                <input type="text" th:field="*{space}" placeholder="Объем в гб">
+                <input type="text" th:field="*{space}" th:value="${product.space}" placeholder="Объем в гб">
             <td th:if="${#fields.hasErrors('space')}" th:errors="*{space}"></td>
         </tr>
 
-        <tr th:if="${TOP.equals('monitor')}">
+        <tr th:if="${TOP==TOP.MONITOR}">
             <td>Диагональ в дюймах:</td>
             <td>
-                <input type="text" th:field="*{diagonal}" placeholder="Диагональ в дюймах">
+                <input type="text" th:field="*{diagonal}" th:value="${product.diagonal}" placeholder="Диагональ в дюймах">
             <td th:if="${#fields.hasErrors('diagonal')}" th:errors="*{diagonal}"></td>
         </tr>
     </table>

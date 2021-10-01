@@ -5,7 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.test.shiftTest.exception.SearchException;
+import org.test.shiftTest.models.TypeOfProducts;
 import org.test.shiftTest.services.ProductService;
 
 @Controller
@@ -19,32 +20,17 @@ public class HomeController {
 
     @GetMapping("/")
     public String homePage(Model model) {
-        productService.replaceProducts(model);
+        model.addAttribute("products",productService.replaceProducts());
         return "homePage";
     }
 
-    @PostMapping(("replaceAllDesktops"))
-    public String replaceAllDesktops(Model model) {
-        productService.replaceDesktops(model);
-        return "homePage";
-    }
-    @PostMapping(("replaceAllNotebooks"))
-    public String replaceAllNotebooks(Model model) {
-        productService.replaceNotebooks(model);
-        return "homePage";
-    }
-    @PostMapping(("replaceAllMonitors"))
-    public String replaceAllMonitors(Model model) {
-        productService.replaceMonitors(model);
-        return "homePage";
-    }
-    @PostMapping(("replaceAllHardDrives"))
-    public String replaceAllHardDrives(Model model) {
-        productService.replaceHardDrives(model);
+    @GetMapping(("replaceAllProducts/{type}"))
+    public String replaceAllProducts(@PathVariable TypeOfProducts type, Model model) {
+        model.addAttribute("products", productService.replaceByType(type));
         return "homePage";
     }
     @GetMapping("show/{Id}")
-    public String show(Model model, @PathVariable Long Id){
+    public String show(Model model, @PathVariable Long Id) throws SearchException {
         model.addAttribute("chosenProduct",productService.searchById(Id));
         return "products/product";
     }

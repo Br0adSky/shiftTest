@@ -2,9 +2,11 @@ package org.test.shiftTest.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
+import org.test.shiftTest.exception.SearchException;
 import org.test.shiftTest.models.*;
 import org.test.shiftTest.repositorys.ProductRepo;
+
+import java.util.List;
 
 @Service
 public class ProductService {
@@ -24,10 +26,32 @@ public class ProductService {
         this.monitorRepo = monitorRepo;
 
     }
+    public Products createClass(TypeOfProducts typeOfProduct){
+        Products product;
+        switch (typeOfProduct) {
+            case DESKTOP:
+                product = new Desktop();
+                break;
+            case NOTEBOOK:
+                product = new Notebooks();
+                break;
+            case HARD_DRIVE:
+                product = new HardDrive();
+                break;
+            case MONITOR:
+                product = new Monitor();
+                break;
+            default:
+                throw new IllegalStateException("Product has no type");
+        }
+        product.setTypeOfProduct(typeOfProduct);
+        return product;
+    }
 
-    public void saveProduct(Products product, Long id) {
-        if (id != null && searchById(id) != null) {
+    public void saveProduct(Products product, Long id){
+        if (id != 0L && searchById(id) != null) {
             product.setProductId(searchById(id).getProductId());
+            System.out.println(product.getProductId());
         }
 
         if (product instanceof Monitor) {
@@ -47,28 +71,15 @@ public class ProductService {
         }
     }
 
-    public void replaceDesktops(Model model) {
-        model.addAttribute("products", desktopRepo.findByTypeOfProduct("desktop"));
+    public List<Products> replaceProducts() {
+        return productRepo.findAll();
+    }
+    public List<Products> replaceByType(TypeOfProducts type){
+        return productRepo.findByTypeOfProduct(type);
     }
 
-    public void replaceNotebooks(Model model) {
-        model.addAttribute("products", notebookRepo.findByTypeOfProduct("notebook"));
-    }
-
-    public void replaceHardDrives(Model model) {
-        model.addAttribute("products", hardDriveRepo.findByTypeOfProduct("hardDrive"));
-    }
-
-    public void replaceMonitors(Model model) {
-        model.addAttribute("products", monitorRepo.findByTypeOfProduct("monitor"));
-    }
-
-    public void replaceProducts(Model model) {
-        model.addAttribute("products", productRepo.findAll());
-    }
-
-    public Products searchById(Long id) {
-        return productRepo.findById(id).get();
+    public Products searchById(Long id) throws SearchException {
+        return productRepo.findById(id).orElseThrow(()->new SearchException(id));
     }
 
     public void deleteProduct(Long productId) {

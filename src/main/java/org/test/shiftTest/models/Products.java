@@ -1,5 +1,7 @@
 package org.test.shiftTest.models;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -10,6 +12,14 @@ import javax.validation.constraints.PositiveOrZero;
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS,
+        include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = org.test.shiftTest.models.Desktop.class, name = "desktop"),
+        @JsonSubTypes.Type(value = Monitor.class, name = "monitor"),
+        @JsonSubTypes.Type(value = HardDrive.class, name = "hardDrive"),
+        @JsonSubTypes.Type(value = Notebooks.class, name = "notebook")
+})
 public class Products {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -24,12 +34,12 @@ public class Products {
     @PositiveOrZero(message = "Количество товаров не может быть отрицательным")
     private Integer unitsInStock;
 
-    private String typeOfProduct;
+    private TypeOfProducts typeOfProduct;
 
     public Products() {
     }
 
-    public Products(String serialNumber, String manufacturer, Integer price, Integer unitsInStock, String typeOfProduct) {
+    public Products(String serialNumber, String manufacturer, Integer price, Integer unitsInStock, TypeOfProducts typeOfProduct) {
         this.serialNumber = serialNumber;
         this.manufacturer = manufacturer;
         this.price = price;

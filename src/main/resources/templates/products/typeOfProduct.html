@@ -7,23 +7,15 @@
 <body>
 <form method="post" th:action="@{chooseTypeOfProduct}">
     Выберите тип товара:
-    <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" id="desktop" th:name="typeOfProduct" value="desktop">
-        <label class="custom-control-label" for="desktop">Настольный компьютер</label>
-    </div>
-    <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" id="notebook" th:name="typeOfProduct" value="notebook">
-        <label class="custom-control-label" for="notebook">Ноутбук</label>
-    </div>
-    <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" id="monitor" th:name="typeOfProduct" value="monitor">
-        <label class="custom-control-label" for="monitor">Монитор</label>
-    </div>
-    <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" id="hardDrive" th:name="typeOfProduct" value="hardDrive">
-        <label class="custom-control-label" for="hardDrive">Жесткий диск</label>
-    </div>
+    <select th:name="type">
+        <option th:each="topt : ${T(org.test.shiftTest.models.TypeOfProducts).values()}"
+                th:value="${topt}" th:text="${topt.value}"></option>
+    </select>
+
     <button type="submit">Далее</button>
+</form>
+<form th:action="@{/}">
+    <button type="submit">Назад</button>
 </form>
 </body>
 </html>

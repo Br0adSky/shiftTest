@@ -8,13 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.test.shiftTest.exception.SearchException;
 import org.test.shiftTest.models.*;
 import org.test.shiftTest.services.ProductService;
 
 import javax.validation.Valid;
 
 @Controller
-public class ProductController {
+public class ProductController  {
     private final ProductService productService;
 
     @Autowired
@@ -23,7 +24,7 @@ public class ProductController {
     }
 
     @GetMapping("editProduct/{Id}")
-    public String editProduct(@PathVariable Long Id, Model model) {
+    public String editProduct(@PathVariable Long Id, Model model) throws SearchException {
         Products product = productService.searchById(Id);
         model.addAttribute("TOP", product.getTypeOfProduct());
         model.addAttribute("product", product);
@@ -31,7 +32,7 @@ public class ProductController {
     }
 
     @GetMapping("deleteProduct/{Id}")
-    public String deleteProduct(@PathVariable Long Id, Model model) {
+    public String deleteProduct(@PathVariable Long Id, Model model) throws SearchException {
         Products product = productService.searchById(Id);
         model.addAttribute("product", product);
         return "products/deleteProduct";
@@ -43,27 +44,9 @@ public class ProductController {
     }
 
     @PostMapping("chooseTypeOfProduct")
-    public String chooseTOP(Model model, @RequestParam String typeOfProduct) {
-        model.addAttribute("TOP", typeOfProduct);
-        Products product;
-        switch (typeOfProduct) {
-            case "desktop":
-                product = new Desktop();
-                break;
-            case "notebook":
-                product = new Notebooks();
-                break;
-            case "hardDrive":
-                product = new HardDrive();
-                break;
-            case "monitor":
-                product = new Monitor();
-                break;
-            default:
-                throw new IllegalStateException("Product has no type");
-        }
-        product.setTypeOfProduct(typeOfProduct);
-        model.addAttribute("product", product);
+    public String chooseTOP(Model model, @RequestParam TypeOfProducts type) {
+        model.addAttribute("TOP", type);
+        model.addAttribute("product", productService.createClass(type));
         return "products/addNewProduct";
     }
 
@@ -72,30 +55,29 @@ public class ProductController {
         return "products/typeOfProduct";
     }
 
-    @PostMapping("addNewProduct/desktop")
-    public String saveDesktop(@RequestParam(required = false) Long Id,
-                              @Valid Desktop product,BindingResult bindingResult, Model model) {
+    @PostMapping("addNewProduct/DESKTOP")
+    public String saveDesktop(@Valid Desktop product,BindingResult bindingResult, Model model) {
         return checkErrors(product, bindingResult, model, "product",
-                "products/addNewProduct", "redirect:/", Id);
+                "products/addNewProduct", "redirect:/", product.getProductId());
     }
 
-    @PostMapping("addNewProduct/notebook")
+    @PostMapping("addNewProduct/NOTEBOOK")
     public String saveNotebook(@Valid Notebooks product, BindingResult bindingResult,
-                               Model model, @RequestParam(required = false) Long Id) {
+                               Model model) {
         return checkErrors(product, bindingResult, model, "product",
-                "products/addNewProduct", "redirect:/", Id);
+                "products/addNewProduct", "redirect:/", product.getProductId());
     }
 
-    @PostMapping("addNewProduct/hardDrive")
-    public String saveHardDrive(@Valid HardDrive product, BindingResult bindingResult, Model model, @RequestParam(required = false) Long Id) {
+    @PostMapping("addNewProduct/HARD_DRIVE")
+    public String saveHardDrive(@Valid HardDrive product, BindingResult bindingResult, Model model) {
         return checkErrors(product, bindingResult, model, "product",
-                "products/addNewProduct", "redirect:/", Id);
+                "products/addNewProduct", "redirect:/", product.getProductId());
     }
 
-    @PostMapping("addNewProduct/monitor")
-    public String saveMonitor(@Valid Monitor product, BindingResult bindingResult, Model model, @RequestParam(required = false) Long Id) {
+    @PostMapping("addNewProduct/MONITOR")
+    public String saveMonitor(@Valid Monitor product, BindingResult bindingResult, Model model) {
         return checkErrors(product, bindingResult, model, "product",
-                "products/addNewProduct", "redirect:/", Id);
+                "products/addNewProduct", "redirect:/", product.getProductId());
     }
 
     public String checkErrors(@Valid Products product, BindingResult bindingResult, Model model,

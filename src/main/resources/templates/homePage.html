@@ -9,17 +9,17 @@
 <form th:action="createNewProduct" method="get">
     <button type="submit">добавить новый продукт</button>
 </form>
-<form th:action="@{/replaceAllDesktops}" method="post">
+<form th:action="@{/replaceAllProducts/DESKTOP}" method="get">
     <button type="submit">отобразить все настольные компьютеры</button>
 </form>
 
-<form th:action="@{/replaceAllNotebooks}" method="post">
+<form th:action="@{/replaceAllProducts/NOTEBOOK}" method="get">
     <button type="submit">отобразить все ноутбуки</button>
 </form>
-<form th:action="@{/replaceAllMonitors}" method="post">
+<form th:action="@{/replaceAllProducts/MONITOR}" method="get">
     <button type="submit">отобразить все мониторы</button>
 </form>
-<form th:action="@{/replaceAllHardDrives}" method="post">
+<form th:action="@{/replaceAllProducts/HARD_DRIVE}" method="get">
     <button type="submit">отобразить все жесткие диски</button>
 </form>
 <form th:action="@{/}" method="get">
@@ -42,11 +42,12 @@
             <td th:text="${product.getSerialNumber()}"></td>
             <td th:text="${product.getManufacturer()}"></td>
             <td th:text="${product.getUnitsInStock()}"></td>
-            <td th:text="${product.getTypeOfProduct()}"></td>
-            <td th:if="${product.typeOfProduct.equals('desktop')}" th:text="${product.formFactor}"></td>
-            <td th:if="${product.typeOfProduct.equals('hardDrive')}"th:text="${product.space}" ></td>
-            <td th:if="${product.typeOfProduct.equals('monitor')}" th:text="${product.diagonal}"></td>
-            <td th:if="${product.typeOfProduct.equals('notebook')}" th:text="${product.dimensions}"></td>
+            <td th:text="${product.getTypeOfProduct().value}"></td>
+            <td th:if="${product.typeOfProduct == product.typeOfProduct.DESKTOP}" th:text="${product.formFactor}"></td>
+            <td th:if="${product.typeOfProduct == product.typeOfProduct.HARD_DRIVE}" th:text="${product.space}"></td>
+            <td th:if="${product.typeOfProduct == product.typeOfProduct.MONITOR}" th:text="${product.diagonal}"></td>
+            <td th:if="${product.typeOfProduct == product.typeOfProduct.NOTEBOOK}"
+                th:text="${product.dimensions.value}"></td>
             <td><a th:href="@{/editProduct/{Id}(Id = ${product.productId})}">Редактировать</a></td>
             <td><a th:href="@{/deleteProduct/{Id}(Id = ${product.productId})}">Удалить продукт</a></td>
         </tr>
